@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الانساب - موقع الأنساب والعائلات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/modal.css">
+    <style>
+        /* أنماط البوت mhf.ahmed */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            border: none;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--gray-medium);
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-green));
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: var(--gray-light);
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--primary-gold);
+            color: white;
+            border-bottom-left-radius: 2px;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: white;
+            color: var(--text-dark);
+            border-bottom-right-radius: 2px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid var(--gray-medium);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid var(--gray-medium);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .chat-send {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chat-send:hover {
+            background: var(--primary-gold);
+        }
+
+        .typing-indicator {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 5px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .chat-window {
+                width: calc(100vw - 40px);
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- الرأس (Header) -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>الانساب</h1>
+                    <p class="tagline">موقع الأنساب والعائلات</p>
+                </div>
+                <nav class="nav">
+                    <a href="#home" class="nav-link active">الرئيسية</a>
+                    <a href="#search" class="nav-link">البحث</a>
+                    <a href="#about" class="nav-link">عن الموقع</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- القسم الرئيسي (Hero Section) -->
+    <section class="hero" id="home">
+        <div class="hero-background">
+            <img src="https://private-us-east-1.manuscdn.com/sessionFile/fpLXkn3HYy3cxnY792CSYN/sandbox/n5Auj13E19iIXvr13E1kz0-img-1_1771022991000_na1fn_aGVyby1iZw.jpg?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvZnBMWGtuM0hZeTNjeG5ZNzkyQ1NZTi9zYW5kYm94L241QXVqMTNFMTlpSVh2cjEzRTFrejAtaW1nLTFfMTc3MTAyMjk5MTAwMF9uYTFmbl9hR1Z5YnkxaVp3LmpwZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=bXuxlWGY0bmd9e3cPTkrGcrtGpd~0D4z1QZEB0KOREvg67vLBnV6hG1etb3VN4~XkDF9YQBkpEe3~7BOPlBGisYpq4Ry6~JYTewMP6-EAjk0tLZN3n7E5YzDNR0XzSaxC~qFVOhxJTsoe7qQf9x4heX32x6huElcletHrKu3qK4KMGkLQKL7eiwvFC126osXeV7DtfrPYawaUkFzQWUc1mgumMEePFL0PTLxdFz5iOSKvRTvyS3i7fYZtF4u6cIx4zJ0e6andPWhUqlUdWv4vb8n00bni2tXxqwLdnFeXELp6wWiy38IvIAQU-nmr-PD0XY1IzOO5FCs~sOivuKyaQ__" alt="خلفية الموقع" class="hero-image">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="container">
+                <div class="hero-text">
+                    <h2 class="hero-title">أهلاً وسهلاً بك في موقع الانساب</h2>
+                    <p class="hero-subtitle">منصة متخصصة في حفظ وتوثيق أنساب العائلات والقبائل</p>
+                    <p class="hero-description">
+                        موقعنا يوفر لك أداة سهلة وآمنة لتوثيق نسبك وأصولك، والبحث عن أقاربك، 
+                        والتعرف على تاريخ عائلتك. نحن نؤمن بأهمية الحفاظ على الروابط العائلية 
+                        والتراث الأسري للأجيال القادمة.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم البحث (Search Section) -->
+    <section class="search-section" id="search">
+        <div class="container">
+            <h2 class="section-title">ابحث عن أقاربك</h2>
+            <p class="section-subtitle">استخدم أحد الخيارات التالية للبحث عن أهلك وقرابتك</p>
+            
+            <div class="search-grid">
+                <!-- بطاقة البحث عن الأهل -->
+                <div class="search-card">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">البحث عن الأهل</h3>
+                    <p class="card-description">ابحث عن أفراد عائلتك وأقاربك باستخدام الأسماء والنسب</p>
+                    <div class="search-input-group">
+                        <input type="text" class="search-input" placeholder="أدخل اسم الشخص أو النسب...">
+                        <button class="search-btn" onclick="searchFamily()">بحث</button>
+                    </div>
+                    <p class="coming-soon">✓ قاعدة البيانات متاحة الآن</p>
+                </div>
+
+                <!-- بطاقة البحث عن القرابة -->
+                <div class="search-card">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                            <polyline points="10 17 14 13 10 9"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">بحث القرابة</h3>
+                    <p class="card-description">تحقق من درجة القرابة والعلاقة بينك وبين شخص آخر</p>
+                    <div class="search-input-group">
+                        <input type="text" class="search-input" placeholder="أدخل أسماء الأشخاص...">
+                        <button class="search-btn" onclick="searchRelationship()">بحث</button>
+                    </div>
+                    <p class="coming-soon">✓ قاعدة البيانات متاحة الآن</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم عن الموقع (About Section) -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <h2 class="section-title">عن موقع الانساب</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>مرحباً بك في منصة الانساب</h3>
+                    <p>
+                        موقع الانساب هو منصة متخصصة في توثيق وحفظ الأنساب والعائلات. نحن نسعى لتوفير 
+                        أداة سهلة الاستخدام وآمنة تساعدك على:
+                    </p>
+                    <ul class="about-list">
+                        <li>توثيق نسبك وأصول عائلتك</li>
+                        <li>البحث عن أقاربك والتعرف عليهم</li>
+                        <li>معرفة درجات القرابة والعلاقات العائلية</li>
+                        <li>الحفاظ على التراث الأسري للأجيال القادمة</li>
+                    </ul>
+                    <p>
+                        نحن نؤمن بأهمية الروابط العائلية والحفاظ على الهوية والتراث. موقعنا يوفر 
+                        بيئة آمنة وموثوقة لتحقيق هذه الأهداف.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- التذييل (Footer) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 موقع الانساب. جميع الحقوق محفوظة.</p>
+                <p>منصة متخصصة في توثيق الأنساب والعائلات</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- رسالة الترحيب (Welcome Modal) -->
+    <div id="welcomeModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeWelcomeModal()">&times;</button>
+            <div class="modal-body">
+                <h2 class="modal-title">أهلاً وسهلاً بك</h2>
+                <p class="modal-quote">"بالإجماع والسنة والكتاب = فواجب تعلم الانساب"</p>
+                <p class="modal-description">نرحب بك في موقع الانساب، منصة متخصصة في توثيق وحفظ أنساب العائلات والقبائل.</p>
+                <button class="modal-button" onclick="closeWelcomeModal()">ابدأ الآن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- البوت mhf.ahmed -->
+    <div class="chat-widget">
+        <button class="chat-button" onclick="toggleChat()" title="تحدث مع mhf.ahmed">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </button>
+        <div id="chatWindow" class="chat-window">
+            <div class="chat-header">
+                <h4>البوت mhf.ahmed</h4>
+                <button onclick="toggleChat()" style="background:none; border:none; color:white; cursor:pointer; font-size:20px;">&times;</button>
+            </div>
+            <div id="chatMessages" class="chat-messages">
+                <div class="message bot-message">مرحباً بك! أنا mhf.ahmed، خبير الأنساب. كيف يمكنني مساعدتك اليوم؟</div>
+            </div>
+            <div id="typingIndicator" class="typing-indicator" style="padding: 0 15px;">mhf.ahmed يكتب الآن...</div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" class="chat-input" placeholder="اكتب رسالتك هنا..." onkeypress="handleChatKey(event)">
+                <button class="chat-send" onclick="sendChatMessage()">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+    <script
+      defer
+      src="%VITE_ANALYTICS_ENDPOINT%/umami"
+      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+</body>
+</html>
